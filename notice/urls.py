@@ -6,4 +6,5 @@ urlpatterns = [
     path('notice/', views.notice, name='notice'),
     path('notice/<int:id>/', views.notice_detail, name='notice_detail'),
     path('notice-search/', views.notice_search, name='notice-search'),
+    path('notice-password/', views.notice_password, name='notice-password'),
 ]

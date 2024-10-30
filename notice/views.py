@@ -46,6 +46,15 @@ def notice_detail(request, id):
 @api_view(['GET'])
 def notice_search(request):
     query = request.query_params.get('search')
-    data = NoticeModel.objects.filter(Q(title__icontains=query) | Q(contents__icontains=query) | Q(nickname__icontains=query)).order_by('-id')
+    condition = Q(id__icontains=query) | Q(title__icontains=query) | Q(contents__icontains=query) | Q(nickname__icontains=query)
+    data = NoticeModel.objects.filter(condition).order_by('-id')
     serializer = NoticeSerializer(data, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def notice_password(request):
+    queryId = request.query_params.get('id')
+    queryPw = request.query_params.get('pw')
+    data = NoticeModel.objects.filter(id=queryId, password=queryPw)
+    return Response(len(data), status=status.HTTP_200_OK)
