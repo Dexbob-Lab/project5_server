@@ -4,4 +4,10 @@ from .models import NoticeModel
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoticeModel
-        fields = ['id', 'nickname', 'password', 'title', 'contents', 'is_lock', 'view_count', 'created', 'updated']
+        fields = ['id', 'nickname', 'password', 'title', 'contents', 'lockon', 'hits', 'created', 'updated']
+
+
+class NoticeHitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NoticeModel
+        fields = ['id', 'hits']
