@@ -13,7 +13,7 @@ def home(request):
 @api_view(['GET', 'POST'])
 def notice(request):
     if request.method == 'GET':
-        data = NoticeModel.objects.all()
+        data = NoticeModel.objects.all().order_by('-id')
         serializer = NoticeSerializer(data, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -45,7 +45,7 @@ def notice_detail(request, id):
 
 @api_view(['GET'])
 def notice_search(request):
-    query = NoticeModel.query_params.get('search')
-    data = NoticeModel.objects.filter(Q(title__icontains=query) | Q(body__icontains=query) | Q(category__icontains=query))
+    query = request.query_params.get('search')
+    data = NoticeModel.objects.filter(Q(title__icontains=query) | Q(contents__icontains=query) | Q(nickname__icontains=query)).order_by('-id')
     serializer = NoticeSerializer(data, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
