@@ -1,6 +1,6 @@
 from django.db import models
 
-class NoticeModel(models.Model):
+class QuestionModel(models.Model):
     nickname = models.CharField(max_length=30, unique=False)
     password = models.CharField(max_length=30, null=False, blank=False)
     title = models.CharField(max_length=255)

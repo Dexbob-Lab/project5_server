@@ -4,21 +4,22 @@ from django.db.models import Q
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from notice.serializers import NoticeSerializer, NoticeHitSerializer
-from notice.models import NoticeModel
+from question.serializers import QuestionSerializer, QuestionHitSerializer
+from question.models import QuestionModel
+
 
 def home(request):
-    return HttpResponse("공지사항 게시판 서버 연결")
+    return HttpResponse("문의사항 게시판 서버 연결")
 
 
 @api_view(['GET', 'POST'])
-def notice(request):
+def question(request):
     if request.method == 'GET':
-        data = NoticeModel.objects.all().order_by('-id')
-        serializer = NoticeSerializer(data, many=True)
+        data = QuestionModel.objects.all().order_by('-id')
+        serializer = QuestionSerializer(data, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        serializer = NoticeSerializer(data=request.data)
+        serializer = QuestionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -26,17 +27,17 @@ def notice(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def notice_detail(request, id):
+def question_detail(request, id):
     try:
-        data = NoticeModel.objects.get(id=id)
-    except NoticeModel.DoesNotExist:
+        data = QuestionModel.objects.get(id=id)
+    except QuestionModel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = NoticeSerializer(data)
+        serializer = QuestionSerializer(data)
         return Response(serializer.data)
     elif request.method == 'PUT':
-        serializer = NoticeSerializer(data, data=request.data)
+        serializer = QuestionSerializer(data, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -47,30 +48,30 @@ def notice_detail(request, id):
 
 
 @api_view(['GET'])
-def notice_search(request):
+def question_search(request):
     query = request.query_params.get('search')
     condition = Q(id__icontains=query) | Q(title__icontains=query) | Q(contents__icontains=query) | Q(nickname__icontains=query)
-    data = NoticeModel.objects.filter(condition).order_by('-id')
-    serializer = NoticeSerializer(data, many=True)
+    data = QuestionModel.objects.filter(condition).order_by('-id')
+    serializer = QuestionSerializer(data, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
-def notice_password(request):
+def question_password(request):
     queryId = request.query_params.get('id')
     queryPw = request.query_params.get('pw')
-    data = NoticeModel.objects.filter(id=queryId, password=queryPw)
+    data = QuestionModel.objects.filter(id=queryId, password=queryPw)
     return Response(len(data), status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'PUT'])
-def notice_hits(request, id):
+def question_hits(request, id):
     try:
-        data = NoticeModel.objects.get(id=id)
-    except NoticeModel.DoesNotExist:
+        data = QuestionModel.objects.get(id=id)
+    except QuestionModel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = NoticeHitSerializer(data, data=request.data)
+    serializer = QuestionHitSerializer(data, data=request.data)
 
     if serializer.is_valid():
         serializer.save()
