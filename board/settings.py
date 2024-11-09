@@ -11,18 +11,24 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from . import env
+import environ
+import os
+
+# set casting, default value
+env = environ.Env(    
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-bxarl*cz$yc*(us9^a3pa!*mg$84^^)0y_z-3!^b96&fgeu#+c"
-# SECRET_KEY = env.getEnvValue("SECRET_KEY")
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -61,7 +67,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [  
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://project5-gules.vercel.app",
+    "https://project5-pearl.vercel.app",
 ]
 
 ROOT_URLCONF = "board.urls"

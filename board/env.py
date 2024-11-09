@@ -14,3 +14,8 @@ def getEnvValue(key):
 
 
 # SECRET_KEY = getEnvValue("SECRET_KEY")
+
+# env.json
+# {
+#     "SECRET_KEY": "키값"
+# }
