@@ -14,14 +14,11 @@ from pathlib import Path
 import environ
 import os
 
-# set casting, default value
-env = environ.Env(    
-    DEBUG=(bool, False)
-)
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# set casting, default value
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
@@ -33,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'project5-fos3.onrender.com']
+ALLOWED_HOSTS = ['localhost', os.environ.get('SERVER_DJANGO_URL', '127.0.0.1')]
 
 
 # Application definition
@@ -66,8 +63,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [  
     "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://project5-pearl.vercel.app",
+    "https://"+os.environ.get('SERVER_APP_URL', '127.0.0.1:5173'),
 ]
 
 ROOT_URLCONF = "board.urls"
